@@ -1,0 +1,12 @@
+{
+    "type": "mariadb",
+    "host": "db",
+    "port": 3306,
+    "username": "mentorship",
+    "password": "mentorshippass",
+    "database": "mentorship",
+    "entities": [
+        "dist/**/*.entity{.ts,.js}"
+    ],
+    "synchronize": true
+}
