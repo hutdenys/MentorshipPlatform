@@ -1,3 +1,24 @@
 /.github
 /backend/node_modules
 /frontend/node_modules
+
+package-lock.json
+
+# Build output
+/frontend/build
+/backend/dist
+
+# Logs
+*.log
+
+# Environment files
+.env
+
+# Coverage
+coverage/
+
+# OS/IDE files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
