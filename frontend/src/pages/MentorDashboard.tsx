@@ -1,12 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import Header from '../components/Header';
 
 export default function MentorDashboard() {
     const [slots, setSlots] = useState<any[]>([]);
     const mentorId = 1; // TODO: get from auth context
 
     useEffect(() => {
-        axios.get(`/api/scheduling/mentor/${mentorId}/slots`).then(res => {
+        axios.get(`http://localhost:5000/api/scheduling/mentor/${mentorId}/slots`).then(res => {
             setSlots(res.data);
         });
     }, [mentorId]);
@@ -16,10 +17,10 @@ export default function MentorDashboard() {
 
     const handleCreateSlot = async (e: React.FormEvent) => {
         e.preventDefault();
-        await axios.post(`/api/scheduling/mentor/${mentorId}/slots`, { startAt, endAt });
+        await axios.post(`http://localhost:5000/api/scheduling/mentor/${mentorId}/slots`, { startAt, endAt });
         setStartAt('');
         setEndAt('');
-        const res = await axios.get(`/api/scheduling/mentor/${mentorId}/slots`);
+        const res = await axios.get(`http://localhost:5000/api/scheduling/mentor/${mentorId}/slots`);
         setSlots(res.data);
     };
 
@@ -28,7 +29,7 @@ export default function MentorDashboard() {
             <h2>Mentor Dashboard</h2>
             <h3>Your Time Slots</h3>
             <ul>
-                {slots.map(s => (
+                {slots.map((s: any) => (
                     <li key={s.id}>
                         {new Date(s.startAt).toLocaleString()} - {new Date(s.endAt).toLocaleString()} ({s.status})
                     </li>
