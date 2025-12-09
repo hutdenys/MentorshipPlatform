@@ -1,0 +1,37 @@
+{
+    "name": "mentorship-backend",
+    "version": "1.0.0",
+    "description": "Mentorship platform backend (NestJS)",
+    "main": "dist/main.js",
+    "scripts": {
+        "start": "nest start",
+        "start:dev": "nest start --watch",
+        "start:prod": "node dist/main.js",
+        "build": "nest build"
+    },
+    "dependencies": {
+        "@nestjs/common": "^10.0.0",
+        "@nestjs/core": "^10.0.0",
+        "@nestjs/typeorm": "^10.0.0",
+        "@nestjs/jwt": "^10.0.0",
+        "@nestjs/passport": "^10.0.0",
+        "passport": "^0.6.0",
+        "passport-jwt": "^4.0.1",
+        "bcryptjs": "^2.4.3",
+        "typeorm": "^0.3.17",
+        "mariadb": "^3.2.0",
+        "mysql2": "^3.10.0",
+        "nodemailer": "^6.9.4",
+        "class-validator": "^0.14.0",
+        "class-transformer": "^0.5.1",
+        "@nestjs/platform-express": "^10.0.0"
+    },
+    "devDependencies": {
+        "@nestjs/cli": "^10.0.0",
+        "@nestjs/schematics": "^10.0.0",
+        "typescript": "^5.2.2",
+        "@types/bcrypt": "^5.0.0",
+        "@types/nodemailer": "^6.4.7",
+        "@types/bcryptjs": "^2.4.2"
+    }
+}
