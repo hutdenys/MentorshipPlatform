@@ -15,7 +15,17 @@ export class UsersService {
     }
 
     async findById(id: number): Promise<User> {
-        const user = await this.userRepo.findOne({ where: { id } });
+        const user = await this.userRepo.findOne({
+            where: { id },
+            relations: [
+                'sessionsAsStudent',
+                'sessionsAsStudent.timeSlot',
+                'sessionsAsStudent.mentor',
+                'sessionsAsMentor',
+                'sessionsAsMentor.timeSlot',
+                'sessionsAsMentor.student',
+            ],
+        });
         if (!user) throw new NotFoundException('User not found');
         return user;
     }

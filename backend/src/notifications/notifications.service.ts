@@ -21,6 +21,11 @@ export class NotificationsService {
     });
 
     async sendEmail(to: string, subject: string, text: string) {
+        if (!to || typeof to !== 'string' || !to.includes('@')) {
+            // Не надсилати email, якщо отримувач не визначений або невалідний
+            console.warn(`Email not sent: no valid recipient (to='${to}')`);
+            return { warning: 'No valid recipient defined', to };
+        }
         return this.transporter.sendMail({
             from: process.env.EMAIL_USER,
             to,

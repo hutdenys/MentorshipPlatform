@@ -30,24 +30,30 @@ export class SchedulingService {
 
     // Session booking
     async bookSession(studentId: number, mentorId: number, slotId: number, meetLink: string) {
-        const slot = await this.slotRepo.findOne({ where: { id: slotId } });
+        // Завантажуємо слот разом із mentor (з email)
+        const slot = await this.slotRepo.findOne({ where: { id: slotId }, relations: ['mentor'] });
         if (!slot || slot.status !== 'free') throw new BadRequestException('Slot not available');
         slot.status = 'booked';
         await this.slotRepo.save(slot);
-        const session = this.sessionRepo.create({ student: { id: studentId }, mentor: { id: mentorId }, timeSlot: slot, meetLink, status: 'scheduled' });
+        // Створюємо сесію
+        const session = this.sessionRepo.create({ student: { id: studentId }, mentor: { id: slot.mentor.id }, timeSlot: slot, meetLink, status: 'scheduled' });
         const savedSession = await this.sessionRepo.save(session);
+        // Завантажуємо сесію разом із student і mentor (з email)
+        const fullSession = await this.sessionRepo.findOne({ where: { id: savedSession.id }, relations: ['student', 'mentor'] });
         // Email notification
         await this.notificationsService.sendEmail(
             slot.mentor?.email || '',
             'Session booked',
             `Session #${savedSession.id} has been booked by student #${studentId}. Meet link: ${meetLink}`
         );
+        // 2 seconds delay
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         await this.notificationsService.sendEmail(
-            savedSession.student?.email || '',
+            fullSession?.student?.email || '',
             'Booking confirmation',
             `Your session #${savedSession.id} with mentor #${mentorId} is confirmed. Meet link: ${meetLink}`
         );
-        return savedSession;
+        return fullSession;
     }
 
     // Session cancellation
@@ -66,6 +72,8 @@ export class SchedulingService {
             'Session cancelled',
             `Session #${session.id} was cancelled by ${cancelledBy}.`
         );
+        // 2 seconds delay
+        await new Promise((resolve) => setTimeout(resolve, 2000));
         await this.notificationsService.sendEmail(
             session.student?.email || '',
             'Session cancelled',

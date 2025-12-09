@@ -30,7 +30,13 @@ export default function Sessions() {
         setLoading(true);
         axios.get(`http://localhost:5000/api/users/${userId}`).then(res => {
             const all = [...(res.data.sessionsAsStudent || []), ...(res.data.sessionsAsMentor || [])];
-            setSessions(tab === 'all' ? all : all.filter(s => s.status === tab));
+            if (tab === 'all') {
+                setSessions(all);
+            } else if (tab === 'cancelled') {
+                setSessions(all.filter(s => s.status === 'cancelled_by_student' || s.status === 'cancelled_by_mentor'));
+            } else {
+                setSessions(all.filter(s => s.status === tab));
+            }
         }).finally(() => setLoading(false));
     }, [userId, tab]);
 
